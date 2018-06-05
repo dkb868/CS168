@@ -130,19 +130,19 @@ model = models.Sequential()
 
 input_shape = (90, 110, 85, 1)
 
-model.add(layers.Conv3D(64, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),
+model.add(layers.Conv3D(128, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),
                         input_shape=input_shape, batch_size=None))
 model.add(layers.MaxPooling3D(pool_size = (3,3,3)))
-model.add(layers.Conv3D(64, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1)))
+model.add(layers.Conv3D(128, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1)))
 model.add(layers.MaxPooling3D(pool_size=(3, 3, 3)))
 
-model.add(layers.Conv3D(32, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
+model.add(layers.Conv3D(64, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
 model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
 
-model.add(layers.Conv3D(32, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
+model.add(layers.Conv3D(64, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
 
 model.add(layers.Flatten())
-model.add(layers.Dense(128, activation='relu'))
+model.add(layers.Dense(256, activation='relu'))
 
 model.add(layers.Dense(1, activation='sigmoid'))
 
@@ -164,11 +164,11 @@ train_list, valid_list, group_sub, group_label, group_data = get_train_valid_set
 
 model.compile(optimizer=optimizers.RMSprop(lr=1e-5),
               loss='binary_crossentropy',
-              metrics=['binary_accuracy'])
+              metrics=['binary_accuracy', 'accuracy'])
 
 history = model.fit_generator(
     data_gen(train_list, batch_size),
     steps_per_epoch=int(np.ceil(len(train_list) / batch_size)),
     validation_data=data_gen(valid_list, batch_size),
     validation_steps=int(np.ceil(len(valid_list) / batch_size)),
-    epochs=10, shuffle=True)
+    epochs=32, shuffle=True)
