@@ -212,9 +212,9 @@ history = model.fit_generator(
 
 
 
-
-import matplotlib.pyplot as plt
+import matplotlib
 matplotlib.use('Agg')
+plt = matplotlib.pyplot
 plt.style.use('fivethirtyeight')
 plt.plot(history.history['acc'], label='Training accuracy')
 plt.plot(history.history['val_acc'], label='Testing accuracy')
