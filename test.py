@@ -196,7 +196,7 @@ model.compile(optimizer=optimizers.RMSprop(lr=1e-5),
 
 from keras.callbacks import ModelCheckpoint
  
-checkpoint = ModelCheckpoint(filepath='weights.hdf5', verbose=1, save_best_only=True),
+checkpoint = ModelCheckpoint(filepath='weights.hdf5', verbose=1, save_best_only=True)
 
 history = model.fit_generator(
     data_gen(train_list, batch_size),
