@@ -214,22 +214,28 @@ history = model.fit_generator(
 
 import matplotlib
 matplotlib.use('Agg')
-plt = matplotlib.pyplot
+
+import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
 plt.plot(history.history['acc'], label='Training accuracy')
 plt.plot(history.history['val_acc'], label='Testing accuracy')
 plt.ylim([0,1])
+plt.title('Training Accuracy vs Test Accuracy')
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.legend(loc=4)
+plt.tight_layout()
 plt.show()
 plt.savefig('accuracy.png')
 
+plt.clf()
 plt.style.use('fivethirtyeight')
 plt.plot(history.history['loss'], label='Training Loss')
 plt.plot(history.history['val_loss'], label='Testing Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
+plt.title('Training Loss vs Test Loss')
 plt.legend(loc=4)
+plt.tight_layout()
 plt.show()
 plt.savefig('loss.png')
