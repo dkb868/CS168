@@ -131,7 +131,7 @@ model = models.Sequential()
 input_shape = (90, 110, 85, 1)
 
 # Convolutions and Pooling
-
+"""
 model.add(layers.Conv3D(128, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),
                         input_shape=input_shape, batch_size=None))
 model.add(layers.MaxPooling3D(pool_size = (3,3,3)))
@@ -149,6 +149,26 @@ model.add(layers.Flatten())
 model.add(layers.Dense(256, activation='relu'))
 model.add(layers.Dropout(0.2))
 model.add(layers.Dense(128, activation='relu'))
+model.add(layers.Dense(1, activation='sigmoid'))
+
+model.summary()
+
+98% overfitted
+"""
+model.add(layers.Conv3D(128, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),
+                        input_shape=input_shape, batch_size=None))
+model.add(layers.MaxPooling3D(pool_size = (3,3,3)))
+model.add(layers.Conv3D(128, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1)))
+model.add(layers.MaxPooling3D(pool_size=(3, 3, 3)))
+
+model.add(layers.Conv3D(64, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
+model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
+
+model.add(layers.Conv3D(64, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
+
+model.add(layers.Flatten())
+model.add(layers.Dense(256, activation='relu'))
+
 model.add(layers.Dense(1, activation='sigmoid'))
 
 model.summary()
