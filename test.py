@@ -185,7 +185,7 @@ train_list, valid_list, group_sub, group_label, group_data = get_train_valid_set
     sub_id, label, data, group=group_id, train_ratio=0.8)
 
 
-model.compile(optimizer=optimizers.Adam(lr=0.0002, beta_1=0.9, beta_2=0.999, epsilon=None, decay=1e-6),
+model.compile(optimizer=optimizers.RMSprop(lr=1e-5),
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
