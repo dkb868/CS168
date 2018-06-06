@@ -208,27 +208,27 @@ history = model.fit_generator(
     steps_per_epoch=1,
     validation_data=data_gen(valid_list, batch_size),
     validation_steps=1,
-    epochs=1, shuffle=True)
+    epochs=2, shuffle=True)
 
 
 
 
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
-fig1 = plt.figure()
 plt.plot(history.history['acc'], label='Training accuracy')
 plt.plot(history.history['val_acc'], label='Testing accuracy')
 plt.ylim([0,1])
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.legend(loc=4)
-fig1.savefig('accuracy.png')
+plt.show()
+plt.savefig('accuracy.png')
 
 plt.style.use('fivethirtyeight')
-fig2 = plt.figure()
 plt.plot(history.history['loss'], label='Training Loss')
 plt.plot(history.history['val_loss'], label='Testing Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.legend(loc=4)
-fig2.savefig('loss.png')
+plt.show()
+plt.savefig('loss.png')
