@@ -157,77 +157,40 @@ model.summary()
 """
 
 
-model.add(layers.Conv3D(64, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),
+
+model.add(layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),
                         input_shape=input_shape, batch_size=None))
 model.add(layers.MaxPooling3D(pool_size = (3,3,3)))
-model.add(layers.Conv3D(64, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1)))
+model.add(layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1)))
 model.add(layers.MaxPooling3D(pool_size = (3,3,3)))
-model.add(layers.Conv3D(32, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
+model.add(layers.Dropout(0.1))
+model.add(layers.Conv3D(16, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
 model.add(layers.MaxPooling3D(pool_size = (3,3,3)))
-model.add(layers.Conv3D(32, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
+model.add(layers.Conv3D(16, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
 model.add(layers.BatchNormalization())
 
 # Flattening
 model.add(layers.Flatten())
-model.add(layers.Dense(64, activation='relu'))
-model.add(layers.Dropout(0.25))
-model.add(layers.Dense(32, activation='relu'))
+model.add(layers.Dense(50, activation='relu'))
+model.add(layers.Dropout(0.2))
+model.add(layers.Dense(10, activation='relu'))
 model.add(layers.Dense(1, activation='sigmoid'))
-
 model.summary()
-
 # Batch size
 batch_size = 1
-
 # Training to Validation set ratio
 train_ratio=0.8
-
-
 # Create Groups
 group_id = '23'
 train_list, valid_list, group_sub, group_label, group_data = get_train_valid_set(
     sub_id, label, data, group=group_id, train_ratio=0.8)
-
-
 model.compile(optimizer=optimizers.RMSprop(lr=1e-5),
               loss='binary_crossentropy',
               metrics=['accuracy'])
-
-
-
-model.load_weights('weights.hdf5')
-
-model.evaluate_generator(data_gen(valid_list, batch_size), int(np.ceil(len(valid_list) / batch_size)),10,1,False ,1)
-
-
-"""
-from keras.callbacks import ModelCheckpoint
- 
-checkpoint = ModelCheckpoint(filepath='weights.hdf5', verbose=1, save_best_only=True)
-
 history = model.fit_generator(
     data_gen(train_list, batch_size),
-    callbacks = [checkpoint],
     steps_per_epoch=int(np.ceil(len(train_list) / batch_size)),
     validation_data=data_gen(valid_list, batch_size),
     validation_steps=int(np.ceil(len(valid_list) / batch_size)),
     epochs=100, shuffle=True)
-
-
-
-import matplotlib.pyplot as plt
-plt.style.use('fivethirtyeight')
-plt.plot(history.history['binary_accuracy'], label='Training accuracy')
-plt.plot(history.history['val_binary_accuracy'], label='Testing accuracy')
-plt.ylim([0,1])
-plt.xlabel('Epoch')
-plt.ylabel('Accuracy')
-plt.legend(loc=4)
-
-plt.style.use('fivethirtyeight')
-plt.plot(history.history['loss'], label='Training Loss')
-plt.plot(history.history['val_loss'], label='Testing Loss')
-plt.xlabel('Epoch')
-plt.ylabel('Loss')
-plt.legend(loc=4)
-"""
+                                 

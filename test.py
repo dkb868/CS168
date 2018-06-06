@@ -194,7 +194,6 @@ model.compile(optimizer=optimizers.RMSprop(lr=1e-5),
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
-model.load_weights('weights.hdf5')
 
 model.evaluate_generator(data_gen(valid_list, batch_size),int(np.ceil(len(valid_list) / batch_size)))
 
@@ -203,30 +202,33 @@ from keras.callbacks import ModelCheckpoint
 checkpoint = ModelCheckpoint(filepath='weights.hdf5', verbose=1, save_best_only=True)
 
 
-"""history = model.fit_generator(
+history = model.fit_generator(
     data_gen(train_list, batch_size),
     callbacks = [checkpoint],
-    steps_per_epoch=int(np.ceil(len(train_list) / batch_size)),
+    steps_per_epoch=1,
     validation_data=data_gen(valid_list, batch_size),
-    validation_steps=int(np.ceil(len(valid_list) / batch_size)),
-    epochs=32, shuffle=True)
+    validation_steps=1,
+    epochs=1, shuffle=True)
 
 
 
 
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
-plt.plot(history.history['accuracy'], label='Training accuracy')
-plt.plot(history.history['val_accuracy'], label='Testing accuracy')
+fig1 = plt.figure()
+plt.plot(history.history['acc'], label='Training accuracy')
+plt.plot(history.history['val_acc'], label='Testing accuracy')
 plt.ylim([0,1])
 plt.xlabel('Epoch')
 plt.ylabel('Accuracy')
 plt.legend(loc=4)
+fig1.savefig('accuracy.png')
 
 plt.style.use('fivethirtyeight')
+fig2 = plt.figure()
 plt.plot(history.history['loss'], label='Training Loss')
 plt.plot(history.history['val_loss'], label='Testing Loss')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.legend(loc=4)
-"""
+fig2.savefig('loss.png')
