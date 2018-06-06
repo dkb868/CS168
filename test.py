@@ -155,16 +155,16 @@ model.summary()
 
 98% overfitted
 """
-model.add(layers.Conv3D(8, kernel_size=(4, 4, 4), padding='same', activation='relu', strides=(2, 2, 2),
+model.add(layers.Conv3D(8, kernel_size=(3, 3, 3), padding='same', activation='relu', strides=(1, 1, 1),
                         input_shape=input_shape, batch_size=None))
-model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
-model.add(layers.Conv3D(8, kernel_size=(4, 4, 4), padding='same', activation='relu', strides=(2, 2, 2)))
-model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
-model.add(layers.Conv3D(8, kernel_size=(4, 4, 4), padding='same', activation='relu', strides=(2, 2, 2)))
-model.add(layers.Conv3D(8, kernel_size=(4, 4, 4), padding='same', activation='relu', strides=(2, 2, 2)))
+model.add(layers.MaxPooling3D(pool_size=(3, 3, 3)))
+model.add(layers.Conv3D(8, kernel_size=(3, 3, 3), padding='same', activation='relu', strides=(1, 1, 1)))
+model.add(layers.MaxPooling3D(pool_size=(3, 3, 3)))
+model.add(layers.Conv3D(8, kernel_size=(3, 3, 3), padding='same', activation='relu', strides=(1, 1, 1)))
+model.add(layers.Conv3D(8, kernel_size=(3, 3, 3), padding='same', activation='relu', strides=(1, 1, 1)))
 model.add(layers.BatchNormalization())
 model.add(layers.Dropout(0.2))
-model.add(layers.Conv3D(8, kernel_size=(4, 4, 4), padding='same', activation='relu', strides=(2, 2, 2)))
+model.add(layers.Conv3D(8, kernel_size=(3, 3, 3), padding='same', activation='relu', strides=(1, 1, 1)))
 model.add(layers.Flatten())
 model.add(layers.Dense(50, activation='relu'))
 model.add(layers.Dense(10, activation='relu'))
