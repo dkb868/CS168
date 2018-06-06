@@ -155,23 +155,23 @@ model.summary()
 
 98% overfitted
 """
-model.add(layers.Conv3D(128, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),
+model.add(layers.Conv3D(8, kernel_size=(4, 4, 4), padding='same', activation='relu', strides=(2, 2, 2),
                         input_shape=input_shape, batch_size=None))
-model.add(layers.MaxPooling3D(pool_size = (3,3,3)))
-model.add(layers.Dropout(0.05))
-model.add(layers.Conv3D(128, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1)))
-model.add(layers.MaxPooling3D(pool_size=(3, 3, 3)))
-model.add(layers.Dropout(0.1))
-model.add(layers.Conv3D(64, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
-model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
+model.add(layers.BatchNormalization())
+model.add(layers.Conv3D(8, kernel_size=(4, 4, 4), padding='same', activation='relu', strides=(2, 2, 2)))
+model.add(layers.Conv3D(8, kernel_size=(4, 4, 4), padding='same', activation='relu', strides=(2, 2, 2)))
+model.add(layers.Conv3D(8, kernel_size=(4, 4, 4), padding='same', activation='relu', strides=(2, 2, 2)))
+model.add(layers.BatchNormalization())
 model.add(layers.Dropout(0.2))
-model.add(layers.Conv3D(64, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
-model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
+model.add(layers.Conv3D(8, kernel_size=(4, 4, 4), padding='same', activation='relu', strides=(2, 2, 2)))
+model.add(layers.BatchNormalization())
+model.add(layers.Dropout(0.2))
+model.add(layers.Conv3D(8, kernel_size=(4, 4, 4), padding='same', activation='relu', strides=(2, 2, 2)))
 model.add(layers.Flatten())
-model.add(layers.Dense(128, activation='relu'))
-
+model.add(layers.Dense(50, activation='relu'))
+model.add(layers.Dropout(0.5))
+model.add(layers.Dense(10, activation='relu'))
 model.add(layers.Dense(1, activation='sigmoid'))
-
 model.summary()
 
 
@@ -188,7 +188,7 @@ train_list, valid_list, group_sub, group_label, group_data = get_train_valid_set
     sub_id, label, data, group=group_id, train_ratio=0.8)
 
 
-model.compile(optimizer=optimizers.RMSprop(lr=1e-5),
+model.compile(optimizer=optimizers.Adam(lr=0.0002, beta_1=0.9, beta_2=0.999, epsilon=None, decay=1e-6),
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
