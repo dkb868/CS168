@@ -198,7 +198,7 @@ history = model.fit_generator(
     steps_per_epoch=int(np.ceil(len(train_list) / batch_size)),
     validation_data=data_gen(valid_list, batch_size),
     validation_steps=int(np.ceil(len(valid_list) / batch_size)),
-    epochs=75, shuffle=True)
+    epochs=200, shuffle=True)
                                  
 
 import matplotlib
