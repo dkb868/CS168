@@ -174,7 +174,7 @@ model.add(layers.BatchNormalization())
 model.add(layers.Flatten())
 model.add(layers.Dense(50, activation='relu'))
 model.add(layers.Dropout(0.5))
-model.add(layers.Dense(20, activation='relu'))
+model.add(layers.Dense(10, activation='relu'))
 model.add(layers.Dense(1, activation='sigmoid'))
 model.summary()
 # Batch size
