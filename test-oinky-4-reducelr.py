@@ -173,12 +173,13 @@ model.add(layers.Conv3D(filters, kernel_size=kernal, padding=padding, activation
 model.add(layers.BatchNormalization())
 model.add(layers.Dropout(dropout))
 model.add(layers.Conv3D(filters, kernel_size=kernal, padding=padding, activation='relu', strides=strides,input_shape=input_shape, batch_size=None))
+model.add(layers.Conv3D(filters, kernel_size=kernal, padding=padding, activation='relu', strides=strides,input_shape=input_shape, batch_size=None))
 
 # Flattening
 model.add(layers.Flatten())
 model.add(layers.Dense(50, activation='relu'))
 model.add(layers.Dropout(0.5))
-model.add(layers.Dense(10, activation='relu'))
+model.add(layers.Dense(50, activation='relu'))
 model.add(layers.Dense(1, activation='sigmoid'))
 model.summary()
 # Batch size
