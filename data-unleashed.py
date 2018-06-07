@@ -173,14 +173,14 @@ model.add(layers.BatchNormalization())
 # Flattening
 model.add(layers.Flatten())
 model.add(layers.Dense(50, activation='relu'))
-model.add(layers.Dropout(0.5))
+model.add(layers.Dropout(0.2))
 model.add(layers.Dense(10, activation='relu'))
 model.add(layers.Dense(1, activation='sigmoid'))
 model.summary()
 # Batch size
 batch_size = 1
 # Training to Validation set ratio
-train_ratio=0.9
+train_ratio=0.8
 # Create Groups
 group_id = '23'
 train_list, valid_list, group_sub, group_label, group_data = get_train_valid_set(
