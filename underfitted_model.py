@@ -6,7 +6,7 @@ Created on Mon Jun  4 13:41:11 2018
 @author: dmitri
 """
 
-# Data preprocessing code and general design based on https://github.com/crocodoyle/deep-pac
+# Data preprocessing code and general design based on https://github.com/crocodoyle/deep-pac and https://github.com/miykael/pac2018
 import os
 import numpy as np
 import pickle
