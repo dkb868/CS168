@@ -1,4 +1,6 @@
-# Artificial Neural Network
+# Artificial Neural Network Experiment
+# Done for learning how to build neural nets
+# Taken from Deep Learning A-Z Udemy course (https://www.udemy.com/deeplearning/learn/v4/)
 
 # Installing Theano
 # pip install --upgrade --no-deps git+git://github.com/Theano/Theano.git

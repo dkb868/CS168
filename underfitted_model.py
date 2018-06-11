@@ -6,7 +6,7 @@ Created on Mon Jun  4 13:41:11 2018
 @author: dmitri
 """
 
-#PAC2018_0007.nii
+# Data preprocessing code and general design based on https://github.com/crocodoyle/deep-pac
 import os
 import numpy as np
 import pickle
@@ -44,7 +44,7 @@ data, sub_id, label = pd.DataFrame(data, columns=header), sub_id, label
 
 
 def balance_dataset(sub_id, labels, data):
-    max_label_size = np.min([np.sum(lab == labels) 
+    max_label_size = np.min([np.sum(lab == labels)
                              for lab in np.unique(labels)])
 
     labels_1 = np.where(labels == 0)[0]
@@ -65,13 +65,13 @@ def balance_dataset(sub_id, labels, data):
 
 
 def get_train_valid_set(sub_id, label, data, group='123', train_ratio=0.8):
-    
+
     selecter = [str(int(d)) in group for d in data.Scanner]
 
     group_sub, group_label, group_data = balance_dataset(
         sub_id[selecter], label[selecter], np.array(data[selecter]))
-    
-    
+
+
     train_size = int(len(group_sub) * train_ratio)
     valid_size = len(group_sub) - train_size
 
@@ -91,7 +91,7 @@ def get_train_valid_set(sub_id, label, data, group='123', train_ratio=0.8):
 
     train_list = group_sub[selecter]
     valid_list = group_sub[np.invert(selecter)]
-    
+
     return train_list, valid_list, group_sub, group_label, group_data
 
 
@@ -122,82 +122,52 @@ def data_gen(fileList, batch):
                     batch_label.append(labelID)
 
             yield (np.array(batch_data)[..., None], np.array(batch_label))
-            
-            
-            
+
+
+
 # Neural network definition
 model = models.Sequential()
 
 input_shape = (90, 110, 85, 1)
 
 # Convolutions and Pooling
-"""
-model.add(layers.Conv3D(128, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),
+
+model.add(layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1),
                         input_shape=input_shape, batch_size=None))
 model.add(layers.MaxPooling3D(pool_size = (3,3,3)))
-model.add(layers.Conv3D(128, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1)))
-model.add(layers.MaxPooling3D(pool_size=(3, 3, 3)))
-
-model.add(layers.Conv3D(64, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
-model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
-
-model.add(layers.Conv3D(64, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
-model.add(layers.MaxPooling3D(pool_size=(2, 2, 2)))
-
-# Flattening
-model.add(layers.Flatten())
-model.add(layers.Dense(256, activation='relu'))
+model.add(layers.Conv3D(32, kernel_size=(3, 3, 3), activation='relu', strides=(1, 1, 1)))
+model.add(layers.MaxPooling3D(pool_size = (3,3,3)))
 model.add(layers.Dropout(0.2))
-model.add(layers.Dense(128, activation='relu'))
-model.add(layers.Dense(1, activation='sigmoid'))
-
-model.summary()
-
-98% overfitted
-"""
-
-strides = (2,2,2)
-filters = 8
-padding = 'same'
-kernal = (4,4,4)
-dropout = 0.2
-
-model.add(layers.Conv3D(filters, kernel_size=kernal, padding=padding, activation='relu', strides=strides,input_shape=input_shape, batch_size=None))
-model.add(layers.BatchNormalization())
-model.add(layers.Conv3D(filters, kernel_size=kernal, padding=padding, activation='relu', strides=strides,input_shape=input_shape, batch_size=None))
-model.add(layers.Conv3D(filters, kernel_size=kernal, padding=padding, activation='relu', strides=strides,input_shape=input_shape, batch_size=None))
-model.add(layers.Conv3D(filters, kernel_size=kernal, padding=padding, activation='relu', strides=strides,input_shape=input_shape, batch_size=None))
-model.add(layers.BatchNormalization())
-model.add(layers.Dropout(dropout))
-model.add(layers.Conv3D(filters, kernel_size=kernal, padding=padding, activation='relu', strides=strides,input_shape=input_shape, batch_size=None))
-model.add(layers.BatchNormalization())
-model.add(layers.Dropout(dropout))
-model.add(layers.Conv3D(filters, kernel_size=kernal, padding=padding, activation='relu', strides=strides,input_shape=input_shape, batch_size=None))
+model.add(layers.Conv3D(16, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
+model.add(layers.MaxPooling3D(pool_size = (2,2,2)))
+model.add(layers.Dropout(0.2))
+model.add(layers.Conv3D(16, kernel_size=(2, 2, 2), activation='relu', strides=(1, 1, 1)))
+model.add(layers.MaxPooling3D(pool_size = (2,2,2)))
 
 # Flattening
 model.add(layers.Flatten())
 model.add(layers.Dense(50, activation='relu'))
 model.add(layers.Dropout(0.5))
-model.add(layers.Dense(10, activation='relu'))
+model.add(layers.Dense(25, activation='relu'))
 model.add(layers.Dense(1, activation='sigmoid'))
 model.summary()
+
 # Batch size
 batch_size = 1
+
 # Training to Validation set ratio
 train_ratio=0.8
-# Create Groups
-group_id = '24'
 
-adam = optimizers.Adam(lr=0.0002, beta_1=0.9, beta_2=0.999, epsilon=None, decay=1e-6)
-    
+# Create Groups
+group_id = '23'
 train_list, valid_list, group_sub, group_label, group_data = get_train_valid_set(
     sub_id, label, data, group=group_id, train_ratio=0.8)
-model.compile(optimizer=adam,
+model.compile(optimizer=optimizers.RMSprop(lr=1e-5),
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
 from keras.callbacks import ModelCheckpoint
- 
+
 checkpoint = ModelCheckpoint(filepath='weights.hdf5', verbose=1, save_best_only=True)
 
 history = model.fit_generator(
@@ -207,7 +177,7 @@ history = model.fit_generator(
     validation_data=data_gen(valid_list, batch_size),
     validation_steps=int(np.ceil(len(valid_list) / batch_size)),
     epochs=75, shuffle=True)
-                                 
+
 
 import matplotlib
 matplotlib.use('Agg')
